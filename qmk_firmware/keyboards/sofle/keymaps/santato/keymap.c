@@ -10,42 +10,69 @@
  * edit it directly.
  */
 
-enum custom_keycodes {
-    MY_X = SAFE_RANGE,
-    MY_Y,
+
+enum {
+    TD_ALT_CAPS,
+};
+
+void dance_alt_caps_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        register_code(KC_LALT);
+        unregister_code(KC_LALT);
+    } else if (state->count == 2) {
+        register_code(KC_CAPS);
+        unregister_code(KC_CAPS);
+    }
+}
+
+void dance_alt_caps_reset(tap_dance_state_t *state, void *user_data) {
+    
+}
+
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_ALT_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_alt_caps_finished, dance_alt_caps_reset)
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [0] = LAYOUT(KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_GRV, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSPC, KC_LSFT, KC_A, KC_S, KC_D, KC_F, LT(3,KC_G), KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_MUTE, CW_TOGG, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT, KC_LGUI, KC_LALT, KC_CAPS, MY_X, KC_SPC, KC_ENT, MY_Y, KC_DEL, KC_HOME, KC_END),
-    [1] = LAYOUT(KC_ESC, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_TAB, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_F12, KC_LSFT, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE, KC_LCTL, KC_EQL, KC_MINS, KC_PLUS, KC_LCBR, KC_RCBR, KC_TRNS, KC_TRNS, KC_LBRC, KC_RBRC, KC_SCLN, KC_COLN, KC_BSLS, KC_TRNS, KC_LGUI, KC_LALT, KC_CAPS, MY_X, KC_SPC, KC_ENT, MY_Y, KC_DEL, KC_HOME, KC_END),
-    [2] = LAYOUT(KC_ESC, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TAB, KC_INS, KC_PSCR, KC_APP, KC_NO, KC_NO, KC_PGUP, LCTL(KC_LEFT), KC_UP, LCTL(KC_RGHT), LCTL(KC_BSPC), KC_BSPC, KC_LSFT, KC_LALT, KC_LCTL, KC_LSFT, KC_NO, KC_CAPS, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL, KC_BSPC, KC_LCTL, LCTL(KC_Z), LCTL(KC_X), LCTL(KC_C), LCTL(KC_V), KC_NO, KC_TRNS, KC_TRNS, KC_NO, KC_HOME, KC_NO, KC_END, KC_NO, KC_TRNS, KC_LGUI, KC_LALT, KC_CAPS, MY_X, KC_SPC, KC_ENT, MY_Y, KC_DEL, KC_HOME, KC_END),
-    [3] = LAYOUT(KC_ESC, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NUM, KC_PSLS, KC_PAST, KC_PMNS, KC_LPRN, KC_RPRN, KC_TAB, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_P7, KC_P8, KC_P9, KC_PPLS, KC_NO, KC_BSPC, KC_LSFT, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_P4, KC_P5, KC_P6, KC_PEQL, KC_NO, KC_NO, KC_LCTL, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_P1, KC_P2, KC_P3, KC_DOT, KC_NO, KC_NO, KC_LGUI, KC_LALT, KC_CAPS, KC_NO, KC_SPC, KC_PENT, KC_NO, KC_NO, KC_P0, KC_COMM)
+    [0] = LAYOUT(
+        KC_ESC,  KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_DEL,
+        KC_TAB,  KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_CIRC,
+        KC_LCTL, KC_A, KC_S, KC_D, KC_F, LT(4,KC_G), KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_NUHS,
+        TG(3),   KC_Z, KC_X, KC_C, KC_V, KC_B, KC_MPLY, CW_TOGG, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, LT(2,KC_GRV),
+        KC_LGUI, TD(TD_ALT_CAPS), KC_TILD, LT(1,KC_BSPC), LSFT_T(KC_SPC), SC_SENT, KC_BSPC, RALT_T(KC_QUOT), KC_HOME, KC_END
+    ),
+    [1] = LAYOUT(
+        KC_ESC, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11,
+        KC_TAB, KC_BSLS, KC_PSLS, KC_PAST, KC_LPRN, KC_RPRN, KC_CIRC, KC_ASTR, KC_EXLM, KC_AMPR, KC_PGUP, KC_F12,
+        KC_LCTL, KC_UNDS, KC_PMNS, KC_PPLS, KC_LBRC, KC_RBRC, KC_DLR, KC_COLN, KC_PERC, KC_UNDS, KC_PGDN, KC_GT,
+        KC_PCMM, KC_DOT, KC_GRV, KC_QUOT, KC_SCLN, KC_EQL, KC_CALC, KC_CALC, KC_HASH, KC_AT, KC_QUES, KC_DOT, KC_PCMM, KC_LT,
+        KC_LGUI, TD(TD_ALT_CAPS), KC_DEL, KC_TRNS, LSFT_T(KC_SPC), SC_SENT, KC_BSPC, KC_DEL, KC_HOME, KC_END
+    ),
+    [2] = LAYOUT(
+        KC_ESC, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11,
+        KC_TAB, KC_BSLS, KC_PSLS, KC_PAST, KC_LPRN, KC_RPRN, KC_CIRC, KC_ASTR, KC_EXLM, KC_AMPR, KC_PGUP, KC_F12,
+        KC_LCTL, KC_UNDS, KC_PMNS, KC_PPLS, KC_LBRC, KC_RBRC, KC_DLR, KC_COLN, KC_PERC, KC_UNDS, KC_PGDN, KC_GT,
+        KC_PCMM, KC_DOT, KC_GRV, KC_QUOT, KC_SCLN, KC_EQL, KC_CALC, KC_CALC, KC_HASH, KC_AT, KC_QUES, KC_DOT, KC_PCMM, KC_LT,
+        KC_LGUI, TD(TD_ALT_CAPS), KC_DEL, KC_BSPC, LSFT_T(KC_SPC), SC_SENT, KC_TRNS, KC_DEL, KC_HOME, KC_END
+    ),
+    [3] = LAYOUT(
+        KC_ESC, KC_MPLY, KC_MPRV, KC_MNXT, KC_NO, KC_NO, KC_APP, KC_NO, KC_NO, KC_NO, KC_NO, KC_MPLY,
+        KC_TAB, KC_NO, KC_NO, KC_UP, KC_NO, KC_NO, KC_NO, KC_NO, KC_UP, KC_NO, KC_NO, KC_MNXT,
+        KC_LCTL, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_MPRV,
+        KC_TRNS, KC_Z, KC_X, KC_C, KC_V, KC_NO, KC_CALC, KC_CALC, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_TRNS,
+        KC_LGUI, TD(TD_ALT_CAPS), KC_DEL, LT(1,KC_BSPC), LSFT_T(KC_SPC), SC_SENT, LT(2,KC_BSPC), KC_DEL, KC_HOME, KC_END
+    ),
+    [4] = LAYOUT(
+        KC_ESC, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_NUM, KC_PSLS, KC_PAST, KC_PMNS, KC_TRNS, KC_TRNS,
+        KC_TAB, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_P7, KC_P8, KC_P9, KC_PPLS, KC_TRNS, KC_GRV,
+        KC_LCTL, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_P4, KC_P5, KC_P6, KC_PEQL, KC_TRNS, KC_TILD,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_CALC, KC_CALC, KC_P1, KC_P2, KC_P3, KC_DOT, KC_TRNS, KC_DQUO,
+        KC_LGUI, TD(TD_ALT_CAPS), KC_DEL, KC_BSPC, LSFT_T(KC_SPC), SC_SENT, KC_BSPC, KC_P0, KC_COMM, KC_TRNS
+    )
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!record->event.pressed) return true; // ignora o keyup
 
-    switch (keycode) {
-        case MY_X:
-            switch (get_highest_layer(layer_state)) {
-                case 0: layer_move(1); break;
-                case 1: layer_move(0); break;
-                case 2: layer_move(1); break;
-            }
-            return false;
-        case MY_Y:
-            switch (get_highest_layer(layer_state)) {
-                case 0: layer_move(2); break;
-                case 1: layer_move(2); break;
-                case 2: layer_move(0); break;
-            }
-            return false;
-    }
-    return true;
-}
 
 #ifdef OTHER_KEYMAP_C
 #    include OTHER_KEYMAP_C
 #endif // OTHER_KEYMAP_C
-
-

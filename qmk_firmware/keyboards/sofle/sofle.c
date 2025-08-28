@@ -121,13 +121,13 @@ void print_status_narrow(void) {
             oled_write_P(PSTR("1 ALT"), false);
             break;
         case 2:
-            oled_write_P(PSTR("2 MOV"), false);
+            oled_write_P(PSTR("2 ALT"), false);
             break;
         case 3:
-            oled_write_P(PSTR("3 NUM"), false);
+            oled_write_P(PSTR("3 MOV"), false);
             break;
         case 4:
-            oled_write_P(PSTR("Adjust"), false);
+            oled_write_P(PSTR("4 NUM"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
